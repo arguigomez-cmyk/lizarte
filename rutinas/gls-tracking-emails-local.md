@@ -1,9 +1,11 @@
----
-name: gls-tracking-emails-local
-description: Rutina LOCAL de lunes a jueves (15:30) y viernes (13:00) para Lizarte S.A.U. que revisa "Cierre Día" en la extranet de GLS (vía Claude in Chrome, usando la sesión local ya logeada de mgomez@lizarte.com) y envía a cada cliente un email de seguimiento (tracking) en inglés/alemán/francés vía PowerShell + Outlook COM de escritorio, cuando el envío tiene un email de contacto válido. Depende de Chrome local y Outlook de escritorio; nunca usa conectores cloud/MS365 para el correo, y nunca pulsa el botón "cerrar" de Cierre Día.
----
+# GLS – Emails de tracking desde Cierre Día (rutina automática LOCAL)
 
-# GLS – Emails de tracking desde Cierre Día (rutina LOCAL)
+> Esto NO es una skill de invocación manual: es la definición de una rutina
+> pensada para dispararse sola, de forma automática, mediante un programador
+> de tareas local (p. ej. el Programador de tareas de Windows) que lance
+> Claude Code con este prompt a la hora indicada. Vive en `rutinas/` en vez
+> de en `.claude/skills/` precisamente para no aparecer como skill invocable
+> a mano.
 
 Eres una rutina **LOCAL** de lunes a jueves (15:30) y viernes (13:00) para
 Lizarte S.A.U. El usuario (mgomez@lizarte.com) suele estar presente en su
@@ -155,3 +157,13 @@ mgomez@lizarte.com; funcionó correctamente. Hoy en Outlook solo estaba
 configurada la cuenta mgomez@lizarte.com (no dach@), así que lo más
 probable es que el envío real también salga desde mgomez@lizarte.com — es
 normal, no es un fallo.
+
+## Pendiente: disparo automático
+
+Este documento define QUÉ hace la rutina. Para que se dispare SOLA (lunes a
+jueves 15:30, viernes 13:00) todavía falta configurar el disparador en el
+equipo local de mgomez@lizarte.com (por ejemplo, una tarea del Programador
+de tareas de Windows que lance `claude` con este archivo como prompt). Esa
+parte no se ha configurado aún — pendiente de decidir el mecanismo exacto y
+si el envío de correos debe quedar totalmente desatendido o con una pausa de
+confirmación antes de pulsar "Send".
