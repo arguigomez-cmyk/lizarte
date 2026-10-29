@@ -7,6 +7,7 @@
   - Busca claude_desktop_config.json en las dos rutas posibles:
       %APPDATA%\Claude\  (instalación normal)
       %LOCALAPPDATA%\Packages\Claude_*\LocalCache\Roaming\Claude\  (Microsoft Store / MSIX)
+      %LOCALAPPDATA%\Claude-Data\claude_*\  (instalación del PC de mgomez)
   - Si la entrada existe: guarda una copia de ella en
       %LOCALAPPDATA%\LizarteMCP\GESTIONA_for_LZRT.json
     (carpeta local, no sincronizada con OneDrive ni perfil móvil).
@@ -49,6 +50,8 @@ function Escribir([string]$texto, [string]$color = 'Gray') {
 $candidatos = @(Join-Path $env:APPDATA 'Claude\claude_desktop_config.json')
 $candidatos += Get-ChildItem -Path (Join-Path $env:LOCALAPPDATA 'Packages') -Filter 'Claude_*' -Directory -ErrorAction SilentlyContinue |
     ForEach-Object { Join-Path $_.FullName 'LocalCache\Roaming\Claude\claude_desktop_config.json' }
+$candidatos += Get-ChildItem -Path (Join-Path $env:LOCALAPPDATA 'Claude-Data') -Filter 'claude_*' -Directory -ErrorAction SilentlyContinue |
+    ForEach-Object { Join-Path $_.FullName 'claude_desktop_config.json' }
 $configs = @($candidatos | Where-Object { Test-Path $_ })
 
 if ($configs.Count -eq 0) {
@@ -121,6 +124,8 @@ foreach ($ruta in $configs) {
 # --- 4. Últimas líneas de los logs -------------------------------------------
 if (-not $Silencioso) {
     $dirLogs = @(Join-Path $env:APPDATA 'Claude\logs')
+    $dirLogs += Get-ChildItem -Path (Join-Path $env:LOCALAPPDATA 'Claude-Data') -Filter 'claude_*' -Directory -ErrorAction SilentlyContinue |
+        ForEach-Object { Join-Path $_.FullName 'logs' }
     $dirLogs += Get-ChildItem -Path (Join-Path $env:LOCALAPPDATA 'Packages') -Filter 'Claude_*' -Directory -ErrorAction SilentlyContinue |
         ForEach-Object { Join-Path $_.FullName 'LocalCache\Roaming\Claude\logs' }
     foreach ($d in $dirLogs | Where-Object { Test-Path $_ }) {
