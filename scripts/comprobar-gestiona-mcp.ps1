@@ -52,7 +52,7 @@ $candidatos += Get-ChildItem -Path (Join-Path $env:LOCALAPPDATA 'Packages') -Fil
     ForEach-Object { Join-Path $_.FullName 'LocalCache\Roaming\Claude\claude_desktop_config.json' }
 $candidatos += Get-ChildItem -Path (Join-Path $env:LOCALAPPDATA 'Claude-Data') -Filter 'claude_*' -Directory -ErrorAction SilentlyContinue |
     ForEach-Object { Join-Path $_.FullName 'claude_desktop_config.json' }
-$configs = @($candidatos | Where-Object { Test-Path $_ })
+$configs = @($candidatos | Select-Object -Unique | Where-Object { Test-Path $_ })
 
 if ($configs.Count -eq 0) {
     Escribir "No se encuentra ningún claude_desktop_config.json. ¿Está instalado Claude Desktop?" 'Red'
@@ -128,7 +128,7 @@ if (-not $Silencioso) {
         ForEach-Object { Join-Path $_.FullName 'logs' }
     $dirLogs += Get-ChildItem -Path (Join-Path $env:LOCALAPPDATA 'Packages') -Filter 'Claude_*' -Directory -ErrorAction SilentlyContinue |
         ForEach-Object { Join-Path $_.FullName 'LocalCache\Roaming\Claude\logs' }
-    foreach ($d in $dirLogs | Where-Object { Test-Path $_ }) {
+    foreach ($d in $dirLogs | Select-Object -Unique | Where-Object { Test-Path $_ }) {
         foreach ($f in @('mcp.log', "mcp-server-$NombreServidor.log")) {
             $p = Join-Path $d $f
             if (Test-Path $p) {
